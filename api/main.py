@@ -18,7 +18,7 @@ from typing import Annotated
 
 from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import HTMLResponse
 
 from api.models import (
     BookingSlotOut,
@@ -37,7 +37,6 @@ from storage.db import (
     upsert_slots,
 )
 
-print(">>> LOADING api.main - routes will include /test <<<")
 app = FastAPI(title="Korciksan Sprawdzisanu", version="0.1.0")
 
 app.add_middleware(
@@ -67,7 +66,6 @@ VENUE_SPORTS = [
 
 @app.on_event("startup")
 def on_startup():
-    print(">>> STARTUP — registered routes:", [r.path for r in app.routes])
     init_db()
 
 
@@ -256,6 +254,3 @@ def _rec_out(r: Recommendation) -> RecommendationOut:
 def root():
     return HTMLResponse((_frontend_dir / "index.html").read_text(encoding="utf-8"))
 
-@app.get("/test")
-def test_route():
-    return {"ok": True}
