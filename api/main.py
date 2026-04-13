@@ -13,10 +13,12 @@ Run with:
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date, time
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import FastAPI, Query, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, HTMLResponse
 
 from api.models import (
     BookingSlotOut,
@@ -35,6 +37,7 @@ from storage.db import (
     upsert_slots,
 )
 
+print(">>> LOADING api.main - routes will include /test <<<")
 app = FastAPI(title="Korciksan Sprawdzisanu", version="0.1.0")
 
 app.add_middleware(
@@ -43,6 +46,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+_frontend_dir = Path(__file__).parent.parent / "frontend"
 
 # Thread pool for running sync scrapers without blocking the event loop
 _executor = ThreadPoolExecutor(max_workers=3)
@@ -62,6 +67,7 @@ VENUE_SPORTS = [
 
 @app.on_event("startup")
 def on_startup():
+    print(">>> STARTUP — registered routes:", [r.path for r in app.routes])
     init_db()
 
 
@@ -242,3 +248,14 @@ def _rec_out(r: Recommendation) -> RecommendationOut:
         bookings=[_booking_out(b) for b in r.bookings],
         score=r.score,
     )
+
+
+# ── Frontend ──────────────────────────────────────────────────────────────────
+
+@app.get("/", include_in_schema=False)
+def root():
+    return HTMLResponse((_frontend_dir / "index.html").read_text(encoding="utf-8"))
+
+@app.get("/test")
+def test_route():
+    return {"ok": True}

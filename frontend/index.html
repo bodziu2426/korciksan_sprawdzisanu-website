@@ -4,9 +4,457 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Korciksan Sprawdzisanu</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:        #0f1117;
+            --surface:   #1a1d27;
+            --surface2:  #22263a;
+            --border:    #2e3350;
+            --accent:    #5b8af7;
+            --accent2:   #f7a25b;
+            --green:     #4caf82;
+            --text:      #e8eaf0;
+            --muted:     #8890a8;
+            --radius:    12px;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            min-height: 100vh;
+            padding: 24px 16px 64px;
+        }
+
+        /* ── Header ── */
+        header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        header h1 span { color: var(--accent); }
+        header p {
+            color: var(--muted);
+            margin-top: 6px;
+            font-size: 0.95rem;
+        }
+
+        /* ── Layout ── */
+        .container { max-width: 860px; margin: 0 auto; }
+
+        /* ── Search form ── */
+        .search-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .search-card h2 {
+            font-size: 1rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+        .fields {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+        .field label {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+        }
+        .field input, .field select {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.95rem;
+            padding: 9px 12px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .field input:focus, .field select:focus {
+            border-color: var(--accent);
+        }
+        .field select option { background: var(--surface2); }
+
+        .btn-search {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 28px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+        .btn-search:hover { opacity: 0.85; }
+        .btn-search:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* ── Venues status bar ── */
+        .venues-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .venue-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+        .venue-chip .dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+        .venue-chip.fresh .dot  { background: var(--green); }
+        .venue-chip.stale .dot  { background: var(--accent2); }
+
+        /* ── Results ── */
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .results-header h2 { font-size: 1.1rem; }
+        .results-header .count {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .rec-list { display: flex; flex-direction: column; gap: 10px; }
+
+        .rec-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: border-color 0.15s;
+        }
+        .rec-card:hover { border-color: var(--accent); }
+        .rec-card.dual {
+            border-color: var(--accent2);
+            background: linear-gradient(135deg, var(--surface) 0%, #2a2010 100%);
+        }
+        .rec-card.dual:hover { border-color: #f7c47b; }
+
+        .rec-time {
+            font-size: 1.5rem;
+            font-weight: 700;
+            min-width: 70px;
+            color: var(--accent);
+        }
+        .rec-card.dual .rec-time { color: var(--accent2); }
+
+        .rec-body { flex: 1; }
+        .rec-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .rec-bookings {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .booking-pill {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 3px 10px;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+        .booking-pill .sport-icon { margin-right: 4px; }
+
+        .rec-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 3px 9px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .badge-dual {
+            background: #3a2a00;
+            color: var(--accent2);
+            border: 1px solid var(--accent2);
+        }
+        .badge-standard {
+            background: #0f1a30;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        /* ── States ── */
+        .state {
+            text-align: center;
+            padding: 48px 0;
+            color: var(--muted);
+        }
+        .state .icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .state p { font-size: 0.95rem; }
+        .spinner {
+            width: 32px; height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin: 0 auto 14px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Cache info footer ── */
+        .cache-info {
+            margin-top: 20px;
+            font-size: 0.78rem;
+            color: var(--muted);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .cache-info span {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 2px 8px;
+        }
+        .cache-info .refreshed { color: var(--green); border-color: var(--green); }
+        .cache-info .failed    { color: #e07070; border-color: #e07070; }
+    </style>
 </head>
 <body>
-    <h1>Korciksan Sprawdzisanu</h1>
-    <p><!-- TODO: search UI --></p>
+<div class="container">
+
+    <header>
+        <h1>Korciksan <span>Sprawdzisanu</span></h1>
+        <p>Znajdź wolny kort squash lub badminton we Wrocławiu</p>
+    </header>
+
+    <!-- Search form -->
+    <div class="search-card">
+        <h2>Szukaj</h2>
+        <div class="fields">
+            <div class="field">
+                <label>Sport</label>
+                <select id="sport">
+                    <option value="squash">Squash</option>
+                    <option value="badminton">Badminton</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Data</label>
+                <input type="date" id="date">
+            </div>
+            <div class="field">
+                <label>Liczba osób</label>
+                <input type="number" id="persons" value="2" min="1" max="10">
+            </div>
+            <div class="field">
+                <label>Godzina od</label>
+                <input type="time" id="time_from" value="08:00">
+            </div>
+            <div class="field">
+                <label>Godzina do</label>
+                <input type="time" id="time_to" value="22:00">
+            </div>
+        </div>
+        <button class="btn-search" id="searchBtn" onclick="search()">Szukaj kortów</button>
+    </div>
+
+    <!-- Venue status bar -->
+    <div class="venues-bar" id="venuesBar"></div>
+
+    <!-- Results -->
+    <div id="results">
+        <div class="state">
+            <div class="icon">🏸</div>
+            <p>Wybierz parametry i kliknij "Szukaj kortów"</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const API = '';
+
+    const VENUE_NAMES = {
+        playmore: 'Playmore',
+        wsc:      'WSC',
+        hasta:    'Hasta la Vista',
+    };
+
+    const SPORT_ICONS = {
+        squash:   '🟡',
+        badminton:'🏸',
+    };
+
+    // Set default date to today
+    document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+
+    // Load venue status on startup
+    loadVenueStatus();
+
+    async function loadVenueStatus() {
+        try {
+            const res = await fetch(`${API}/venues`);
+            const venues = await res.json();
+            renderVenueBar(venues);
+        } catch (e) {
+            document.getElementById('venuesBar').innerHTML =
+                `<span style="color:var(--muted);font-size:.8rem">Brak połączenia z API</span>`;
+        }
+    }
+
+    function renderVenueBar(venues) {
+        const bar = document.getElementById('venuesBar');
+        // Group by venue, show as one chip per venue+sport
+        bar.innerHTML = venues.map(v => {
+            const cls = v.cache_fresh ? 'fresh' : 'stale';
+            const label = `${VENUE_NAMES[v.venue] || v.venue} ${v.sport}`;
+            const title = v.last_scraped
+                ? `Ostatnio: ${new Date(v.last_scraped).toLocaleTimeString('pl-PL')}`
+                : 'Nigdy nie pobrano';
+            return `<div class="venue-chip ${cls}" title="${title}">
+                        <div class="dot"></div>${label}
+                    </div>`;
+        }).join('');
+    }
+
+    async function search() {
+        const sport     = document.getElementById('sport').value;
+        const date      = document.getElementById('date').value;
+        const persons   = document.getElementById('persons').value;
+        const time_from = document.getElementById('time_from').value;
+        const time_to   = document.getElementById('time_to').value;
+
+        const btn = document.getElementById('searchBtn');
+        btn.disabled = true;
+        btn.textContent = 'Szukam...';
+
+        setResultsLoading();
+
+        try {
+            const params = new URLSearchParams({ sport, date, persons, time_from, time_to });
+            const res = await fetch(`${API}/search?${params}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            renderResults(data);
+            // Refresh venue bar after search (cache may have updated)
+            loadVenueStatus();
+        } catch (e) {
+            setResultsError(e.message);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Szukaj kortów';
+        }
+    }
+
+    function setResultsLoading() {
+        document.getElementById('results').innerHTML = `
+            <div class="state">
+                <div class="spinner"></div>
+                <p>Pobieram dostępność kortów...</p>
+            </div>`;
+    }
+
+    function setResultsError(msg) {
+        document.getElementById('results').innerHTML = `
+            <div class="state">
+                <div class="icon">⚠️</div>
+                <p>Błąd: ${msg}</p>
+            </div>`;
+    }
+
+    function renderResults(data) {
+        const el = document.getElementById('results');
+        const recs = data.recommendations;
+
+        if (recs.length === 0) {
+            el.innerHTML = `
+                <div class="state">
+                    <div class="icon">😕</div>
+                    <p>Brak wolnych kortów w wybranym przedziale czasowym.</p>
+                </div>`;
+            return;
+        }
+
+        const dualCount = recs.filter(r => r.rule === 'playmore_dual').length;
+
+        el.innerHTML = `
+            <div class="results-header">
+                <h2>Wyniki</h2>
+                <span class="count">${recs.length} propozycji${dualCount ? ` · ${dualCount} podwójnych` : ''}</span>
+            </div>
+            <div class="rec-list">
+                ${recs.map(renderRec).join('')}
+            </div>
+            ${renderCacheInfo(data.cache_info)}
+        `;
+    }
+
+    function renderRec(r) {
+        const isDual = r.rule === 'playmore_dual';
+        const hour   = r.hour.slice(0, 5); // HH:MM
+        const badge  = isDual
+            ? `<span class="rec-badge badge-dual">Dual sport</span>`
+            : `<span class="rec-badge badge-standard">${VENUE_NAMES[r.venue] || r.venue}</span>`;
+
+        const pills = r.bookings.map(b => `
+            <div class="booking-pill">
+                <span class="sport-icon">${SPORT_ICONS[b.sport] || ''}</span>
+                kort ${b.court_number} · ${b.duration_min}min
+                ${b.price ? `· ${b.price} zł` : ''}
+            </div>`).join('');
+
+        return `
+            <div class="rec-card ${isDual ? 'dual' : ''}">
+                <div class="rec-time">${hour}</div>
+                <div class="rec-body">
+                    <div class="rec-label">${r.label}</div>
+                    <div class="rec-bookings">${pills}</div>
+                </div>
+                ${badge}
+            </div>`;
+    }
+
+    function renderCacheInfo(info) {
+        const entries = Object.entries(info).map(([key, status]) => {
+            const cls = status === 'refreshed' ? 'refreshed'
+                      : status === 'failed'    ? 'failed'
+                      : '';
+            return `<span class="${cls}">${key}: ${status}</span>`;
+        }).join('');
+        return `<div class="cache-info">${entries}</div>`;
+    }
+</script>
 </body>
 </html>

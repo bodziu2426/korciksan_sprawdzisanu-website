@@ -12,7 +12,8 @@
       "Bash(curl -s http://127.0.0.1:8000/)",
       "Bash(curl -s http://127.0.0.1:8000/venues)",
       "Bash(curl -s \"http://127.0.0.1:8000/search?sport=squash&persons=2&date=2026-04-14\")",
-      "Bash(curl -s \"http://127.0.0.1:8000/search?sport=squash&persons=4&date=2026-04-14&time_from=18:00&time_to=20:00\")"
+      "Bash(curl -s \"http://127.0.0.1:8000/search?sport=squash&persons=4&date=2026-04-14&time_from=18:00&time_to=20:00\")",
+      "Bash(python -c \"import api.main; import inspect; print\\(inspect.getfile\\(api.main\\)\\)\")"
     ]
   }
 }
