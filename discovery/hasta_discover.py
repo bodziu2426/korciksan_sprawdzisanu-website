@@ -1,20 +1,22 @@
 """
-WSC Discovery Script
---------------------
-Runs a headed Playwright browser on wsclub.pl/rezerwacje and logs all
-XHR/fetch network requests so we can identify the underlying booking API.
+Hasta la Vista Discovery Script
+---------------------------------
+Runs a headed Playwright browser on hastalavista.pl and logs all XHR/fetch
+network requests so we can identify the booking API or HTML structure.
 
 Usage:
-    python discovery/wsc_discover.py
+    python discovery/hasta_discover.py
 
-Browse the calendar manually in the browser window that opens.
+Browse the calendar for squash and badminton.
 All API calls will be printed to the terminal.
-Press Ctrl+C or close the browser when done.
+Close the browser window when done.
 """
 
 import asyncio
 import json
 from playwright.async_api import async_playwright
+
+SQUASH_URL = "https://hastalavista.pl/rezerwacje/?type=squash"
 
 
 async def main():
@@ -27,9 +29,12 @@ async def main():
             resource_type = request.resource_type
             if resource_type in ("xhr", "fetch"):
                 print(f"[{resource_type.upper()}] {request.method} {request.url}")
-                post_data = request.post_data
-                if post_data:
-                    print(f"       BODY: {post_data[:300]}")
+                try:
+                    post_data = request.post_data
+                    if post_data:
+                        print(f"       BODY: {post_data[:300]}")
+                except Exception:
+                    pass
 
         async def handle_response(response):
             resource_type = response.request.resource_type
@@ -47,13 +52,13 @@ async def main():
         page.on("request", handle_request)
         page.on("response", handle_response)
 
-        print("Opening WSC reservations page...")
-        print("Browse the calendar — all API calls will be logged here.")
+        print("Opening Hasta la Vista squash reservation page...")
+        print("Browse the calendar, navigate weeks, switch to badminton.")
+        print("All API calls will be logged here.")
         print("Close the browser window when done.\n")
 
-        await page.goto("https://wsclub.pl/rezerwacje")
+        await page.goto(SQUASH_URL)
 
-        # Keep running until browser closes
         try:
             await page.wait_for_event("close", timeout=0)
         except Exception:

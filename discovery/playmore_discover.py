@@ -29,9 +29,12 @@ async def main():
             resource_type = request.resource_type
             if resource_type in ("xhr", "fetch"):
                 print(f"[{resource_type.upper()}] {request.method} {request.url}")
-                post_data = request.post_data
-                if post_data:
-                    print(f"       BODY: {post_data[:300]}")
+                try:
+                    post_data = request.post_data
+                    if post_data:
+                        print(f"       BODY: {post_data[:300]}")
+                except Exception:
+                    pass  # binary/gzip body — skip
 
         async def handle_response(response):
             resource_type = response.request.resource_type
@@ -41,7 +44,7 @@ async def main():
                 if "json" in content_type:
                     try:
                         body = await response.json()
-                        preview = json.dumps(body)[:500]
+                        preview = json.dumps(body)[:3000]
                         print(f"       JSON: {preview}")
                     except Exception:
                         pass
