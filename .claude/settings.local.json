@@ -13,7 +13,10 @@
       "Bash(curl -s http://127.0.0.1:8000/venues)",
       "Bash(curl -s \"http://127.0.0.1:8000/search?sport=squash&persons=2&date=2026-04-14\")",
       "Bash(curl -s \"http://127.0.0.1:8000/search?sport=squash&persons=4&date=2026-04-14&time_from=18:00&time_to=20:00\")",
-      "Bash(python -c \"import api.main; import inspect; print\\(inspect.getfile\\(api.main\\)\\)\")"
+      "Bash(python -c \"import api.main; import inspect; print\\(inspect.getfile\\(api.main\\)\\)\")",
+      "Bash(du -sh * .git)",
+      "Bash(python3 -c \"from PIL import Image; img = Image.open\\('img/barber_lab_logo.jpg'\\); print\\(img.size\\)\")",
+      "Bash(powershell -command 'Add-Type -AssemblyName System.Drawing; $img = [System.Drawing.Image]::FromFile\\(\\(Resolve-Path '\\\\''img/barber_lab_logo.jpg'\\\\''\\)\\); Write-Host \"$\\($img.Width\\)x$\\($img.Height\\)\"; $img.Dispose\\(\\)')"
     ]
   }
 }
