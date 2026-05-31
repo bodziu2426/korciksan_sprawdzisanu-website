@@ -16,7 +16,12 @@
       "Bash(python -c \"import api.main; import inspect; print\\(inspect.getfile\\(api.main\\)\\)\")",
       "Bash(du -sh * .git)",
       "Bash(python3 -c \"from PIL import Image; img = Image.open\\('img/barber_lab_logo.jpg'\\); print\\(img.size\\)\")",
-      "Bash(powershell -command 'Add-Type -AssemblyName System.Drawing; $img = [System.Drawing.Image]::FromFile\\(\\(Resolve-Path '\\\\''img/barber_lab_logo.jpg'\\\\''\\)\\); Write-Host \"$\\($img.Width\\)x$\\($img.Height\\)\"; $img.Dispose\\(\\)')"
+      "Bash(powershell -command 'Add-Type -AssemblyName System.Drawing; $img = [System.Drawing.Image]::FromFile\\(\\(Resolve-Path '\\\\''img/barber_lab_logo.jpg'\\\\''\\)\\); Write-Host \"$\\($img.Width\\)x$\\($img.Height\\)\"; $img.Dispose\\(\\)')",
+      "WebSearch",
+      "WebFetch(domain:chomikuj.pl)",
+      "WebFetch(domain:x4.static-chomikuj.pl)",
+      "Bash(ls -lh \"e:/GitHub/barbershoptalos-website/img/image_hero_\"*)",
+      "Bash(ls -lh \"e:/GitHub/barbershoptalos-website/img/img_gallery_\"* \"e:/GitHub/barbershoptalos-website/img/img_about_\"*)"
     ]
   }
 }
