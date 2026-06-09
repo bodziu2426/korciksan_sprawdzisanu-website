@@ -21,7 +21,10 @@
       "WebFetch(domain:chomikuj.pl)",
       "WebFetch(domain:x4.static-chomikuj.pl)",
       "Bash(ls -lh \"e:/GitHub/barbershoptalos-website/img/image_hero_\"*)",
-      "Bash(ls -lh \"e:/GitHub/barbershoptalos-website/img/img_gallery_\"* \"e:/GitHub/barbershoptalos-website/img/img_about_\"*)"
+      "Bash(ls -lh \"e:/GitHub/barbershoptalos-website/img/img_gallery_\"* \"e:/GitHub/barbershoptalos-website/img/img_about_\"*)",
+      "Bash(python3 -c ':*)",
+      "Bash(python -c ':*)",
+      "Bash(python -c \"import openpyxl; print\\(dir\\(openpyxl\\)\\)\")"
     ]
   }
 }
