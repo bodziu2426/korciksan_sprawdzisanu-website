@@ -24,7 +24,8 @@
       "Bash(ls -lh \"e:/GitHub/barbershoptalos-website/img/img_gallery_\"* \"e:/GitHub/barbershoptalos-website/img/img_about_\"*)",
       "Bash(python3 -c ':*)",
       "Bash(python -c ':*)",
-      "Bash(python -c \"import openpyxl; print\\(dir\\(openpyxl\\)\\)\")"
+      "Bash(python -c \"import openpyxl; print\\(dir\\(openpyxl\\)\\)\")",
+      "Bash(python create_nogi_template.py)"
     ]
   }
 }
