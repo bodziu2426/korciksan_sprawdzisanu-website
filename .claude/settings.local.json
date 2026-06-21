@@ -25,7 +25,20 @@
       "Bash(python3 -c ':*)",
       "Bash(python -c ':*)",
       "Bash(python -c \"import openpyxl; print\\(dir\\(openpyxl\\)\\)\")",
-      "Bash(python create_nogi_template.py)"
+      "Bash(python create_nogi_template.py)",
+      "WebFetch(domain:www.toniandguy.com)",
+      "WebFetch(domain:www.redken.com)",
+      "WebFetch(domain:www.joico.com)",
+      "WebFetch(domain:www.morphebrushes.com)",
+      "WebFetch(domain:londonschoolofbeauty.co.uk)",
+      "WebFetch(domain:www.morphe.com)",
+      "WebFetch(domain:www.davines.com)",
+      "WebFetch(domain:www.osmo.co.uk)",
+      "WebFetch(domain:www.wella.com)",
+      "WebFetch(domain:www.matrix.com)",
+      "WebFetch(domain:beautylaunchpad.com)",
+      "WebFetch(domain:www.suavecito.com)",
+      "WebFetch(domain:www.reuzel.com)"
     ]
   }
 }
