@@ -38,7 +38,9 @@
       "WebFetch(domain:www.matrix.com)",
       "WebFetch(domain:beautylaunchpad.com)",
       "WebFetch(domain:www.suavecito.com)",
-      "WebFetch(domain:www.reuzel.com)"
+      "WebFetch(domain:www.reuzel.com)",
+      "Bash(py --version)",
+      "Bash(py3 --version)"
     ]
   }
 }
