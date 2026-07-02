@@ -40,7 +40,10 @@
       "WebFetch(domain:www.suavecito.com)",
       "WebFetch(domain:www.reuzel.com)",
       "Bash(py --version)",
-      "Bash(py3 --version)"
+      "Bash(py3 --version)",
+      "Read(//e/Pobrane/Nowy folder/**)",
+      "Bash(powershell -Command \"Get-Content -Path 'e:\\\\\\\\Pobrane\\\\\\\\Nowy folder\\\\\\\\Raport o powiązaniach komponentów \\(2\\).csv' -Encoding UTF8 | Select-Object -First 50\")",
+      "Bash(powershell -Command ':*)"
     ]
   }
 }
